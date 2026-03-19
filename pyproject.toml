@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [
-  "anyio>=4.12.1",
+  "anyio[trio]>=4.12.1",
   "chainlit>=2.10.0",
   "litellm>=1.82.4",
   "loguru>=0.7.3",
