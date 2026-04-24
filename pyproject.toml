@@ -7,10 +7,9 @@ requires-python = "==3.13.*"
 dependencies = [
   "anyio[trio]>=4.12.1",
   "chainlit>=2.10.0",
-  "litellm>=1.82.4",
   "loguru>=0.7.3",
   "mcp[cli]>=1.26.0",
-  "openai-agents[litellm]",
+  "openai-agents",
   "pillow>=12.1.1",
   "python-dotenv>=1.2.2",
   "yfmcp>=0.8.3",

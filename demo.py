@@ -15,6 +15,7 @@ from loguru import logger
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from mcp.types import ListToolsResult
+from openai import AsyncOpenAI
 from PIL import Image
 
 load_dotenv(find_dotenv(), override=True)
@@ -37,40 +38,10 @@ WELCOME_MESSAGE = (
 )
 
 # Determine which client to use based on environment variables
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-LITELLM_API_KEY = os.getenv("LITELLM_API_KEY")
-LITELLM_BASE_URL = os.getenv("LITELLM_BASE_URL")
-USE_LITELLM = LITELLM_API_KEY is not None and LITELLM_BASE_URL is not None
-
-DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gpt-4.1")
+DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gpt-5-mini")
 
 
-if USE_LITELLM:
-    import litellm
-
-    litellm.api_key = LITELLM_API_KEY
-    litellm.api_base = LITELLM_BASE_URL
-else:
-    from openai import AsyncOpenAI
-
-    openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
-
-
-# Validate required environment variables
-def validate_config() -> None:
-    """Validate required environment variables are set."""
-    if USE_LITELLM:
-        if not LITELLM_API_KEY:
-            raise ValueError("LITELLM_API_KEY must be set when using LiteLLM")
-        if not LITELLM_BASE_URL:
-            raise ValueError("LITELLM_BASE_URL must be set when using LiteLLM")
-    else:
-        if not OPENAI_API_KEY:
-            raise ValueError("OPENAI_API_KEY must be set when using OpenAI")
-
-
-validate_config()
+openai_client = AsyncOpenAI()
 
 
 def patch_anyio_run_sync() -> None:
@@ -142,24 +113,17 @@ async def chat_completion(
     messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None
 ) -> Any:
     """Unified function to call chat completion API."""
-    if USE_LITELLM:
-        kwargs = {"model": DEFAULT_MODEL, "messages": messages}
-        if tools:
-            kwargs["tools"] = tools
-            kwargs["tool_choice"] = "auto"
-        return await litellm.acompletion(**kwargs)
-    else:
-        if tools:
-            return await openai_client.chat.completions.create(
-                model=DEFAULT_MODEL,
-                messages=cast(Any, messages),
-                tools=cast(Any, tools),
-                tool_choice="auto",
-            )
+    if tools:
         return await openai_client.chat.completions.create(
             model=DEFAULT_MODEL,
             messages=cast(Any, messages),
+            tools=cast(Any, tools),
+            tool_choice="auto",
         )
+    return await openai_client.chat.completions.create(
+        model=DEFAULT_MODEL,
+        messages=cast(Any, messages),
+    )
 
 
 def extract_tool_result(

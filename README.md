@@ -24,17 +24,8 @@ uv sync
 
 Create a `.env` file in the project root.
 
-For OpenAI:
-
 ```env
 OPENAI_API_KEY=your_api_key
-```
-
-For LiteLLM:
-
-```env
-LITELLM_API_KEY=your_api_key
-LITELLM_BASE_URL=your_base_url
 ```
 
 ## Usage
