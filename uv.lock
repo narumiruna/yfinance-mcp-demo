@@ -2732,7 +2732,7 @@ dev = [
 
 [[package]]
 name = "yfmcp"
-version = "0.8.3"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "loguru" },
@@ -2741,7 +2741,7 @@ dependencies = [
     { name = "yfinance" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/ae/ca850f5f0abb032891a72eb4820bfe41af4865c78fdecc75972e555fd905/yfmcp-0.8.3-py3-none-any.whl", hash = "sha256:92b07b7abccbddaad8de198c2f0c7dfa957e522a0e2cd6d54aed645908b267bb", size = 14169, upload-time = "2026-04-04T13:01:01.917Z" },
+    { url = "https://files.pythonhosted.org/packages/70/a1/1a2ec1718c155e0fc2d460892d6ebc9d915b604760aa22a7ccb70f70356b/yfmcp-0.9.0-py3-none-any.whl", hash = "sha256:8a7f3dafbe35f753c6aa99d39f9365e70364815b1fdf188f56cac2aacca57364", size = 15599, upload-time = "2026-04-24T12:27:44.116Z" },
 ]
 
 [[package]]
